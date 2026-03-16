@@ -1,8 +1,8 @@
 
 - job:
-    name: Api_tests
+    name: Web_tests
     project-type: pipeline
-    description: "API tests with Maven and Allure"
+    description: "WEB tests with Maven and Allure"
     parameters:
       - string:
           name: BRANCH
@@ -11,6 +11,6 @@
     pipeline-scm:
       scm:
         - git:
-            url: https://github.com/VardanKhublaryan/otusApiProject.git
+            url: https://github.com/VardanKhublaryan/OtusHomework.git
             branch: main
             script-path: Jenkinsfile

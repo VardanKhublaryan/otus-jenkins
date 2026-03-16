@@ -1,0 +1,1 @@
+jenkins-jobs --conf /home/vardan/otus-jenkins/uploader.ini --flush-cache update /home/vardan/otus-jenkins/jobs/
