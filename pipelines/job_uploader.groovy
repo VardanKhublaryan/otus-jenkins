@@ -7,7 +7,7 @@ node('maven') {
     }
 
     stage('Checkout Repo') {
-        git branch: 'main', url: 'https://github.com/RazMKhitaryan/jenkins_configuration.git'
+        git branch: 'main', url: 'https://github.com/VardanKhublaryan/otus-jenkins.git'
     }
 
     stage('Create uploader.ini') {

@@ -1,0 +1,15 @@
+- job:
+    name: upload_jobs
+    project-type: pipeline
+    description: "Upload Jenkins jobs using Groovy script"
+    parameters:
+      - string:
+          name: "BRANCH"
+          default: "main"
+          description: "Branch to build"
+    pipeline-scm:
+      scm:
+        - git:
+            url: https://github.com/VardanKhublaryan/otus-jenkins.git
+            branch: main
+      script-path: pipelines/jobs_uploader.groovy

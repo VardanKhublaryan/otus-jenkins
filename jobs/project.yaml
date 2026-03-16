@@ -1,0 +1,8 @@
+---
+- project:
+    name: 'job uploader'
+    jobs:
+      - Api_tests
+      - Web_tests
+      - upload_jobs
+      - runner_job

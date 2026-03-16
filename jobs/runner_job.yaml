@@ -1,0 +1,15 @@
+- job:
+    name: runner_job
+    project-type: pipeline
+    description: "Run all test jobs"
+    parameters:
+      - string:
+          name: "BRANCH"
+          default: "master"
+          description: "Branch to build"
+    pipeline-scm:
+      scm:
+        - git:
+            url: https://github.com/VardanKhublaryan/otus-jenkins.git
+            branch: main
+      script-path: pipelines/runner_job.groovy

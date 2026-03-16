@@ -1,0 +1,21 @@
+- job:
+    name: Web_tests
+    project-type: pipeline
+    description: "Web UI tests with Maven and Allure"
+    parameters:
+      - choice:
+          name: BROWSER
+          description: "Choose browser for the tests"
+          choices:
+            - chrome
+            - firefox
+      - string:
+          name: BRANCH
+          default: "main"
+          description: "Git branch to run tests from"
+    pipeline-scm:
+      scm:
+        - git:
+            url: https://github.com/VardanKhublaryan/OtusHomework.git
+            branch: "project-with-spring-testng"
+            script-path: pipelines/jenkinsfile_web.groovy
