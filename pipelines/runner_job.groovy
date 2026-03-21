@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    parameters {
+        // Defining them here in the script acts as a backup to the YAML
+        string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to build')
+        choice(name: 'TEST_TYPE', choices: ['all', 'api', 'web'], description: 'Select suite')
+    }
+
     stages {
         stage('Initialize') {
             steps {
