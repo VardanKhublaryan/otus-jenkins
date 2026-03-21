@@ -50,10 +50,10 @@ pipeline {
                     // Note: Ensure 'Copy Artifact Plugin' is installed in Jenkins
                     // Also check your job names: you had 'jon-api' (typo) vs 'job-api'
                     if (params.TEST_TYPE == 'api' || params.TEST_TYPE == 'all') {
-                        copyArtifacts(projectName: 'Api_tests',filter: 'allure-results/**', target: 'all-results/api', optional: true)
+                        copyArtifacts(projectName: 'Api_tests',filter: 'target/allure-results/**', target: 'all-results/api', optional: true)
                     }
                     if (params.TEST_TYPE == 'web' || params.TEST_TYPE == 'all') {
-                        copyArtifacts(projectName: 'Web_tests',filter: 'allure-results/**', target: 'all-results/web', optional: true)
+                        copyArtifacts(projectName: 'Web_tests',filter: 'target/allure-results/**', target: 'all-results/web', optional: true)
                     }
                 }
             }
