@@ -63,7 +63,7 @@ pipeline {
                         copyArtifacts(
                                 projectName: 'Web_tests',
                                 selector: lastSuccessful(),
-                                filter: 'allure-results/**',
+                                filter: 'target/allure-results/**',
                                 target: 'allure-results/web',
                                 flatten: true,
                                 optional: true
