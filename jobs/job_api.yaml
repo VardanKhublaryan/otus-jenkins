@@ -11,6 +11,6 @@
     pipeline-scm:
       scm:
         - git:
-            url: https://github.com/VardanKhublaryan/otusApiProject.git
+            url: https://github.com/VardanKhublaryan/otus-wiremock
             branch: main
             script-path: Jenkinsfile
