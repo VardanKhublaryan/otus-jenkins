@@ -17,7 +17,7 @@ pipeline {
         stage('Execute Tests') {
             steps {
                 script {
-                    switch(params.TEST_TYPE) {
+                    switch (params.TEST_TYPE) {
                         case 'all':
                             parallel(
                                     "API Tests": {
@@ -47,14 +47,14 @@ pipeline {
         stage('Collect Results') {
             steps {
                 script {
-                    // Note: Ensure 'Copy Artifact Plugin' is installed in Jenkins
-                    // Also check your job names: you had 'jon-api' (typo) vs 'job-api'
+                    // Using 'all-results' as the base folder to match the post block
                     if (params.TEST_TYPE == 'api' || params.TEST_TYPE == 'all') {
                         copyArtifacts(
                                 projectName: 'Api_tests',
                                 selector: lastSuccessful(),
-                                filter: 'allure-results/**',
-                                target: 'allure-results/api',
+                                // Ensure this filter matches what was archived in the child job
+                                filter: '**/allure-results/**',
+                                target: 'all-results/api',
                                 flatten: true,
                                 optional: true
                         )
@@ -63,8 +63,8 @@ pipeline {
                         copyArtifacts(
                                 projectName: 'Web_tests',
                                 selector: lastSuccessful(),
-                                filter: 'target/allure-results/**',
-                                target: 'allure-results/web',
+                                filter: '**/allure-results/**',
+                                target: 'all-results/web',
                                 flatten: true,
                                 optional: true
                         )
@@ -78,8 +78,12 @@ pipeline {
         always {
             echo "Generating Allure Report..."
             allure([
-                    results: [[path: 'all-results/api'], [path: 'all-results/web']]
+                    // These paths now EXACTLY match the 'target' in the copyArtifacts step
+                    results: [
+                            [path: 'all-results/api'],
+                            [path: 'all-results/web']
+                    ]
             ])
         }
     }
-} // End of Pipeline
+}
