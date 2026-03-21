@@ -52,7 +52,6 @@ node('maven') {
         script {
             allure includeProperties: false, jdk: '', results: [
                     [path: 'allure-results/api'],
-                    [path: 'allure-results/mobile'],
                     [path: 'allure-results/web']
             ]
         }

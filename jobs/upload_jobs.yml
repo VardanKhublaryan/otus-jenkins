@@ -11,5 +11,5 @@
       scm:
         - git:
             url: https://github.com/VardanKhublaryan/otus-jenkins.git
-            branch: main
+            branch: master
       script-path: pipelines/jobs_uploader.groovy
