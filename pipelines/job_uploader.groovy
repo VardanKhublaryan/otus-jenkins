@@ -7,7 +7,7 @@ node('maven') {
     }
 
     stage('Checkout Repo') {
-        git branch: 'main', url: 'https://github.com/VardanKhublaryan/otus-jenkins.git'
+        git branch: 'master', url: 'https://github.com/VardanKhublaryan/otus-jenkins.git'
     }
 
     stage('Create uploader.ini') {
@@ -18,7 +18,7 @@ recursive=True
 keep_descriptions=False
 
 [jenkins]
-url=http://45.132.17.22/jenkins/
+url=http://188.130.251.59:6060/jenkins/
 user=admin
 password=admin
 EOF
