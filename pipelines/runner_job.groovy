@@ -45,7 +45,7 @@ pipeline {
                         copyArtifacts(
                                 projectName: 'Api_tests',
                                 selector: lastCompleted(),
-                                filter: 'target/allure-results/**',
+                                filter: '**/allure-results/**',
                                 target: 'all-results/api',
                                 flatten: true,
                                 optional: true
