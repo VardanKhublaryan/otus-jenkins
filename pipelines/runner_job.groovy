@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     parameters {
-        // Defining them here in the script acts as a backup to the YAML
         string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to build')
         choice(name: 'TEST_TYPE', choices: ['all', 'api', 'web'], description: 'Select suite')
     }
@@ -10,6 +9,8 @@ pipeline {
     stages {
         stage('Initialize') {
             steps {
+                // Clean up old results from previous runs so they don't mix with new ones
+                dir('all-results') { deleteDir() }
                 echo "Target selected: ${params.TEST_TYPE}"
             }
         }
@@ -17,53 +18,44 @@ pipeline {
         stage('Execute Tests') {
             steps {
                 script {
-                    switch (params.TEST_TYPE) {
-                        case 'all':
-                            parallel(
-                                    "API Tests": {
-                                        build job: 'Api_tests', parameters: [string(name: 'BRANCH', value: "master")]
-                                    },
-                                    "Web Tests": {
-                                        build job: 'Web_tests', parameters: [string(name: 'BRANCH', value: "main")]
-                                    }
-                            )
-                            break
+                    def jobs = [:]
 
-                        case 'api':
-                            build job: 'Api_tests', parameters: [string(name: 'BRANCH', value: "master")]
-                            break
-
-                        case 'web':
-                            build job: 'Web_tests', parameters: [string(name: 'BRANCH', value: "main")]
-                            break
-
-                        default:
-                            error "Unknown TEST_TYPE: ${params.TEST_TYPE}"
+                    if (params.TEST_TYPE == 'all' || params.TEST_TYPE == 'api') {
+                        jobs["API Tests"] = {
+                            build job: 'Api_tests', parameters: [string(name: 'BRANCH', value: params.BRANCH)], propagate: false
+                        }
                     }
+
+                    if (params.TEST_TYPE == 'all' || params.TEST_TYPE == 'web') {
+                        jobs["Web Tests"] = {
+                            build job: 'Web_tests', parameters: [string(name: 'BRANCH', value: params.BRANCH)], propagate: false
+                        }
+                    }
+
+                    // Run selected jobs in parallel
+                    parallel jobs
                 }
             }
         }
 
-        stage('Collect Results') {
+        stage('Collect and Mix Results') {
             steps {
                 script {
-                    // Using 'all-results' as the base folder to match the post block
-                    if (params.TEST_TYPE == 'api' || params.TEST_TYPE == 'all') {
+                    if (params.TEST_TYPE == 'all' || params.TEST_TYPE == 'api') {
                         copyArtifacts(
                                 projectName: 'Api_tests',
-                                selector: lastSuccessful(),
-                                // Ensure this filter matches what was archived in the child job
-                                filter: '**/allure-results/**',
+                                selector: lastCompleted(),
+                                filter: 'target/allure-results/**',
                                 target: 'all-results/api',
                                 flatten: true,
                                 optional: true
                         )
                     }
-                    if (params.TEST_TYPE == 'web' || params.TEST_TYPE == 'all') {
+                    if (params.TEST_TYPE == 'all' || params.TEST_TYPE == 'web') {
                         copyArtifacts(
                                 projectName: 'Web_tests',
-                                selector: lastSuccessful(),
-                                filter: '**/allure-results/**',
+                                selector: lastCompleted(),
+                                filter: 'target/allure-results/**',
                                 target: 'all-results/web',
                                 flatten: true,
                                 optional: true
@@ -72,13 +64,13 @@ pipeline {
                 }
             }
         }
-    } // End of Stages
+    }
 
     post {
         always {
-            echo "Generating Allure Report..."
+            echo "Generating Mixed Allure Report..."
             allure([
-                    // These paths now EXACTLY match the 'target' in the copyArtifacts step
+                    reportBuildPolicy: 'ALWAYS',
                     results: [
                             [path: 'all-results/api'],
                             [path: 'all-results/web']
