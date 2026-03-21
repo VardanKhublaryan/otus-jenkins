@@ -1,15 +1,22 @@
 - job:
     name: runner_job
     project-type: pipeline
-    description: "Run all test jobs"
+    description: "Orchestrator to run specific or all test jobs"
     parameters:
       - string:
           name: "BRANCH"
           default: "master"
           description: "Branch to build"
+      - choice:
+          name: "TEST_TYPE"
+          description: "Select which test suite to run"
+          choices:
+            - all
+            - api
+            - web
     pipeline-scm:
       scm:
         - git:
             url: https://github.com/VardanKhublaryan/otus-jenkins.git
-            branch: main
+            branch: master
       script-path: pipelines/runner_job.groovy
