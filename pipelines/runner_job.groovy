@@ -37,29 +37,29 @@ pipeline {
                 }
             }
         }
-    }
 
-    stage('Collect Results') {
-        steps {
-            script {
-                // This is the "Magic" part: Copying results from the other jobs
-                // Requires "Copy Artifact Plugin" in Jenkins
-                if (params.TEST_TYPE == 'api' || params.TEST_TYPE == 'all') {
-                    copyArtifacts(projectName: 'jon-api', target: 'all-results/api')
-                }
-                if (params.TEST_TYPE == 'web' || params.TEST_TYPE == 'all') {
-                    copyArtifacts(projectName: 'job-ui', target: 'all-results/web')
+        stage('Collect Results') {
+            steps {
+                script {
+                    // Note: Ensure 'Copy Artifact Plugin' is installed in Jenkins
+                    // Also check your job names: you had 'jon-api' (typo) vs 'job-api'
+                    if (params.TEST_TYPE == 'api' || params.TEST_TYPE == 'all') {
+                        copyArtifacts(projectName: 'job-api', target: 'all-results/api', optional: true)
+                    }
+                    if (params.TEST_TYPE == 'web' || params.TEST_TYPE == 'all') {
+                        copyArtifacts(projectName: 'job-ui', target: 'all-results/web', optional: true)
+                    }
                 }
             }
         }
-    }
-}
+    } // End of Stages
 
-post {
-    always {
-        // Generate the Allure report for the Runner Job
-        allure([
-                results: [[path: 'all-results/api'], [path: 'all-results/web']]
-        ])
+    post {
+        always {
+            echo "Generating Allure Report..."
+            allure([
+                    results: [[path: 'all-results/api'], [path: 'all-results/web']]
+            ])
+        }
     }
-}
+} // End of Pipeline
