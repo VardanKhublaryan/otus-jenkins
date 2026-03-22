@@ -9,25 +9,21 @@ pipeline {
     }
 
     stages {
-        stage('Initialize & JJB Update') {
+        stage('JJB Update') {
+            when {
+                expression { params.ACTION == 'update_and_run' || params.ACTION == 'update_only' }
+            }
             steps {
                 script {
-                    // 1. Clean up old results
-                    dir('all-results') { deleteDir() }
+                    def ini = "/home/vardan/otus-jenkins/uploader.ini"
+                    def jobsDir = "/home/vardan/otus-jenkins/jobs/"
 
-                    // 2. Run JJB Update if requested
-                    if (params.JJB_UPDATE_TAG != 'none') {
-                        echo "Updating Jenkins Jobs via JJB for tag: ${params.JJB_UPDATE_TAG}"
-
-                        def baseCmd = "jenkins-jobs --conf /home/vardan/otus-jenkins/uploader.ini --flush-cache update /home/vardan/otus-jenkins/jobs/"
-
-                        if (params.JJB_UPDATE_TAG == 'all') {
-                            sh "${baseCmd}"
-                        } else {
-                            sh "${baseCmd} --tags ${params.JJB_UPDATE_TAG}"
-                        }
-                    } else {
-                        echo "Skipping JJB Update stage."
+                    if (params.TEST_TYPE == 'all') {
+                        sh "jenkins-jobs --conf ${ini} --flush-cache update ${jobsDir}"
+                    } else if (params.TEST_TYPE == 'api') {
+                        sh "jenkins-jobs --conf ${ini} --flush-cache update ${jobsDir} Api_tests"
+                    } else if (params.TEST_TYPE == 'web') {
+                        sh "jenkins-jobs --conf ${ini} --flush-cache update ${jobsDir} Web_tests"
                     }
                 }
             }
@@ -39,13 +35,13 @@ pipeline {
                     def jobs = [:]
 
                     if (params.TEST_TYPE == 'all' || params.TEST_TYPE == 'api') {
-                        jobs["API Tests"] = {
+                        jobs["API_Tests"] = {
                             build job: 'Api_tests', parameters: [string(name: 'BRANCH', value: params.BRANCH)], propagate: false
                         }
                     }
 
                     if (params.TEST_TYPE == 'all' || params.TEST_TYPE == 'web') {
-                        jobs["Web Tests"] = {
+                        jobs["Web_Tests"] = {
                             build job: 'Web_tests', parameters: [string(name: 'BRANCH', value: params.BRANCH)], propagate: false
                         }
                     }
