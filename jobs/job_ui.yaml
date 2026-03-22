@@ -1,5 +1,8 @@
 - job:
     name: Web_tests
+    tags:
+      - web
+      - all
     project-type: pipeline
     description: "Web UI tests with Maven and Allure"
     parameters:

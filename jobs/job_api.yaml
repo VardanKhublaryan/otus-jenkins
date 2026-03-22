@@ -1,6 +1,9 @@
 
 - job:
     name: Api_tests
+    tags:
+      - api
+      - all
     project-type: pipeline
     description: "API tests with Maven and Allure"
     parameters:

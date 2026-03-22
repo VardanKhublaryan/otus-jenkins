@@ -3,15 +3,33 @@ pipeline {
 
     parameters {
         string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to build')
-        choice(name: 'TEST_TYPE', choices: ['all', 'api', 'web'], description: 'Select suite')
+        choice(name: 'TEST_TYPE', choices: ['all', 'api', 'web'], description: 'Select suite to RUN')
+        // NEW: Parameter to choose which JJB jobs to UPDATE
+        choice(name: 'JJB_UPDATE_TAG', choices: ['none', 'all', 'api', 'web'], description: 'Select JJB tag to UPDATE')
     }
 
     stages {
-        stage('Initialize') {
+        stage('Initialize & JJB Update') {
             steps {
-                // Clean up old results from previous runs so they don't mix with new ones
-                dir('all-results') { deleteDir() }
-                echo "Target selected: ${params.TEST_TYPE}"
+                script {
+                    // 1. Clean up old results
+                    dir('all-results') { deleteDir() }
+
+                    // 2. Run JJB Update if requested
+                    if (params.JJB_UPDATE_TAG != 'none') {
+                        echo "Updating Jenkins Jobs via JJB for tag: ${params.JJB_UPDATE_TAG}"
+
+                        def baseCmd = "jenkins-jobs --conf /home/vardan/otus-jenkins/uploader.ini --flush-cache update /home/vardan/otus-jenkins/jobs/"
+
+                        if (params.JJB_UPDATE_TAG == 'all') {
+                            sh "${baseCmd}"
+                        } else {
+                            sh "${baseCmd} --tags ${params.JJB_UPDATE_TAG}"
+                        }
+                    } else {
+                        echo "Skipping JJB Update stage."
+                    }
+                }
             }
         }
 
@@ -32,7 +50,6 @@ pipeline {
                         }
                     }
 
-                    // Run selected jobs in parallel
                     parallel jobs
                 }
             }
