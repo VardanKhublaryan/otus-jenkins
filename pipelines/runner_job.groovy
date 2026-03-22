@@ -4,7 +4,6 @@ pipeline {
     parameters {
         string(name: 'BRANCH', defaultValue: 'master', description: 'Branch to build')
         choice(name: 'TEST_TYPE', choices: ['all', 'api', 'web'], description: 'Select suite to RUN')
-        // NEW: Parameter to choose which JJB jobs to UPDATE
         choice(name: 'JJB_UPDATE_TAG', choices: ['none', 'all', 'api', 'web'], description: 'Select JJB tag to UPDATE')
     }
 
