@@ -20,10 +20,10 @@ keep_descriptions=False
 [jenkins]
 url=http://188.130.251.59:6060/jenkins/
 user=admin
-password=admin
+password=119b926a54146bbf90880da7d03643a5ea
+query_plugins_info=False
 EOF
         """
-        sh "cat ${CONFIG_FILE}"
     }
 
     stage('Run Upload Script') {
