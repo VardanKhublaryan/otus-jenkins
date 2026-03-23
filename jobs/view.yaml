@@ -2,7 +2,7 @@
     name: QA
     view-type: list
     description: |
-      '<h3 style="color: red;">QA</h3>'
+      'Qa Automation Suits'
     filter-executors: true
     filter-queue: true
     job-name:
