@@ -1,14 +1,17 @@
 - view:
-    name: QA
-    view-type: list
+    name: "QA Dashboard"
+    view-type: dashboard  # Requires Dashboard View Plugin
     description: |
-      '<h3 style="color: red;">QA</h3>'
+      <div style="background-color: #f0f0f0; padding: 10px; border-left: 5px solid red;">
+        <h2 style="margin: 0; color: #333;">🚀 QA Testing Suite</h2>
+        <p style="color: #666;">Automated API and Web regression tests.</p>
+      </div>
     filter-executors: true
     filter-queue: true
     job-name:
       - 'upload_jobs'
-      - 'Web tests'
-      - 'Api tests'
+      - 'Web_tests'
+      - 'Api_tests'
     columns:
       - status
       - weather
@@ -17,3 +20,4 @@
       - last-failure
       - last-duration
       - build-button
+      - "last-stable" # Adds more context
