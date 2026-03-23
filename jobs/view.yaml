@@ -1,6 +1,6 @@
 - view:
-    name: "QA Dashboard"
-    view-type: dashboard  # Requires Dashboard View Plugin
+    name: "QA"
+    view-type: list
     description: |
       <div style="background-color: #f0f0f0; padding: 10px; border-left: 5px solid red;">
         <h2 style="margin: 0; color: #333;">🚀 QA Testing Suite</h2>
