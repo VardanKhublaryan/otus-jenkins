@@ -21,7 +21,7 @@ pipeline {
 
                     if (params.TEST_TYPE == 'all' || params.TEST_TYPE == 'web') {
                         jobs["Web_Tests"] = {
-                            build job: 'Web_tests', parameters: [string(name: 'BRANCH', value: "main")], propagate: false
+                            build job: 'Web_tests', parameters: [string(name: 'BRANCH', value: params.BRANCH)], propagate: false
                         }
                     }
 
