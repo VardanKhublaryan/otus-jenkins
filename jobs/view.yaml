@@ -2,13 +2,17 @@
     name: QA
     view-type: list
     description: |
-      'Qa Automation Suits'
+      <div style="background: #1e3c72; color: white; padding: 10px; border-radius: 5px;">
+          <h2 style="margin: 0;">🚀 QA AUTOMATION HUB</h2>
+      </div>
     filter-executors: true
     filter-queue: true
+    # ADD ALL YOUR JOB NAMES HERE
     job-name:
+      - 'Api_tests'
+      - 'Web_tests'
+      - 'runner_job'
       - 'upload_jobs'
-      - 'Web tests'
-      - 'Api tests'
     columns:
       - status
       - weather
