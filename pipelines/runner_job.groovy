@@ -8,25 +8,25 @@ pipeline {
     }
 
     stages {
-        stage('JJB Update') {
-            when {
-                expression { params.ACTION == 'update_and_run' || params.ACTION == 'update_only' }
-            }
-            steps {
-                script {
-                    def ini = "/home/vardan/otus-jenkins/uploader.ini"
-                    def jobsDir = "/home/vardan/otus-jenkins/jobs/"
-
-                    if (params.TEST_TYPE == 'all') {
-                        sh "jenkins-jobs --conf ${ini} --flush-cache update ${jobsDir}"
-                    } else if (params.TEST_TYPE == 'api') {
-                        sh "jenkins-jobs --conf ${ini} --flush-cache update ${jobsDir} Api_tests"
-                    } else if (params.TEST_TYPE == 'web') {
-                        sh "jenkins-jobs --conf ${ini} --flush-cache update ${jobsDir} Web_tests"
-                    }
-                }
-            }
-        }
+//        stage('JJB Update') {
+//            when {
+//                expression { params.ACTION == 'update_and_run' || params.ACTION == 'update_only' }
+//            }
+//            steps {
+//                script {
+//                    def ini = "/home/vardan/otus-jenkins/uploader.ini"
+//                    def jobsDir = "/home/vardan/otus-jenkins/jobs/"
+//
+//                    if (params.TEST_TYPE == 'all') {
+//                        sh "jenkins-jobs --conf ${ini} --flush-cache update ${jobsDir}"
+//                    } else if (params.TEST_TYPE == 'api') {
+//                        sh "jenkins-jobs --conf ${ini} --flush-cache update ${jobsDir} Api_tests"
+//                    } else if (params.TEST_TYPE == 'web') {
+//                        sh "jenkins-jobs --conf ${ini} --flush-cache update ${jobsDir} Web_tests"
+//                    }
+//                }
+//            }
+//        }
 
         stage('Execute Tests') {
             steps {
