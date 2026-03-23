@@ -1,17 +1,14 @@
 - view:
-    name: "QA"
+    name: QA
     view-type: list
     description: |
-      <div style="background-color: #f0f0f0; padding: 10px; border-left: 5px solid red;">
-        <h2 style="margin: 0; color: #333;">🚀 QA Testing Suite</h2>
-        <p style="color: #666;">Automated API and Web regression tests.</p>
-      </div>
+      '<h3 style="color: red;">QA</h3>'
     filter-executors: true
     filter-queue: true
     job-name:
       - 'upload_jobs'
-      - 'Web_tests'
-      - 'Api_tests'
+      - 'Web tests'
+      - 'Api tests'
     columns:
       - status
       - weather
@@ -20,4 +17,3 @@
       - last-failure
       - last-duration
       - build-button
-      - "last-stable" # Adds more context
