@@ -68,19 +68,6 @@ pipeline {
                             [path: 'all-results/web']
                     ]
             ])
-            script {
-                def allureLink = "${env.BUILD_URL}allure/"
-                def msg = "📊 *Build Finished:* ${currentBuild.fullDisplayName}\n" +
-                        "*Status:* ${currentBuild.currentResult}\n" +
-                        "[View Allure Report](${allureLink})"
-
-                sh """
-            curl -s -X POST https://api.telegram.org/botYOUR_TOKEN/sendMessage \
-            -d chat_id=YOUR_CHAT_ID \
-            -d parse_mode=Markdown \
-            -d text='${msg}'
-            """
-            }
         }
     }
 }
